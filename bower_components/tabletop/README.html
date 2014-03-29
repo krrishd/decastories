@@ -1,0 +1,164 @@
+<!DOCTYPE html><html><head><title>DECA Stories</title><link href="main.css" rel="stylesheet" type="text/css"><!-- JS Dependencies--><script src="bower_components/angular/angular.min.js"></script><script src="bower_components/angular-route/angular-route.min.js"></script><script src="bower_components/tabletop/src/tabletop.js"></script><script src="ctrl.js"></script></head><body ng-app="decaStories"><header><h1>DECA Stories</h1><nav><a href="#/">Home</a><a href="#/submit">Submit</a></nav></header><div class="container"><h1><strong>Tabletop.js</strong> (gives spreadsheets legs)</h1>
+<p><strong>Tabletop.js</strong> takes a Google Spreadsheet and makes it easily accessible through JavaScript. With zero dependencies! If you&#39;ve ever wanted to get JSON from a Google Spreadsheet without jumping through a thousand hoops, welcome home.</p>
+<p>Tabletop.js easily integrates Google Spreadsheets with Backbone.js, Handlebars, and anything else that is hip and cool. It will also help you make new friends and play jazz piano.</p>
+<h3>Like how easy?</h3>
+<pre><code>function init() {
+  Tabletop.init( { key: &#39;0AmYzu_s7QHsmdDNZUzRlYldnWTZCLXdrMXlYQzVxSFE&#39;,
+                   callback: function(data, tabletop) { console.log(data) },
+                   simpleSheet: true } )
+}</code></pre>
+<p>Will give you</p>
+<pre><code>[ { name: &quot;Carrot&quot;, category: &quot;Vegetable&quot;, healthiness: &quot;Adequate&quot; }, 
+  { name: &quot;Pork Shoulder&quot;, category: &quot;Meat&quot;, healthiness: &quot;Questionable&quot; }, 
+  { name: &quot;Bubblegum&quot;, category: &quot;Candy&quot;, healthiness: &quot;Super High&quot;} ]</code></pre>
+<p>Yes, that easy.</p>
+<h2>Okay, wait, we&#39;ve got a big problem. But a solution, too.</h2>
+<p><strong>Google broke Tabletop</strong>. Kind of.</p>
+<p>If you&#39;re signed in to Google and your session expires, Google now requires you <a href="http://productforums.google.com/forum/#!category-topic/docs/documents/0pneogfgzN0">to sign in to view published spreadsheets</a>. While we&#39;ve worked around the problem in recent versions of Tabletop (CORS to the rescue), old versions will experience this problem.</p>
+<p><a href="http://caniuse.com/cors">Most browsers support CORS</a> so you will <em>probably</em> be okay. Google&#39;s sat on this for over a year so I doubt it&#39;s getting fixed. If you&#39;re still running into issues I recommend trying <a href="https://github.com/jsoma/flatware">Flatware</a> or <a href="https://github.com/martinburch/table-service">table-service</a> (or your own proxying solution) in the meantime. Proxies don&#39;t run into this bug since they never sign into a Google account, and they&#39;ll probably make your app faster, too.</p>
+<h2>Notes</h2>
+<h2>Getting Started</h2>
+<p>You might have seen some instructions on <a href="http://builtbybalance.com/Tabletop/"><a href="http://builtbybalance.com/Tabletop/">http://builtbybalance.com/Tabletop/</a></a>, but please ignore them, because they&#39;re <em>super super out of date</em>. Probably don&#39;t <em>break</em> anything, but they sure ain&#39;t current (not my domain, can&#39;t take them down). These docs here are the most up-to-date, so treat them as the gospel truth!</p>
+<h3>1) Getting your data out there</h3>
+<p><em>The first step is to get your data out into a form Tabletop can digest</em></p>
+<p>Take a Google Spreadsheet. Give it some column headers, give it some content.</p>
+<pre><code>Name            Category   Healthiness
+Carrot          Vegetable  Adequate
+Pork Shoulder   Meat       Questionable
+Bubblegum       Candy      Super High</code></pre>
+<p>In Google Docs, then go up to the <code>File</code> menu and pick <code>Publish to the web</code>. Fiddle with whatever you want, then click <code>Start publishing</code>. A URL will appear, something like <code>https://docs.google.com/spreadsheet/pub?hl=en_US&amp;hl=en_US&amp;key=0AmYzu_s7QHsmdDNZUzRlYldnWTZCLXdrMXlYQzVxSFE&amp;output=html</code></p>
+<p>Copy that! In theory you&#39;re interested in the part between <code>key=</code> and <code>&amp;</code> but you can use the whole thing if you want.</p>
+<h3>2) Setting up Tabletop</h3>
+<p><em>Now you&#39;re going to feed your spreadsheet into Tabletop</em></p>
+<p>Include Tabletop in your HTML, then try the following, substituting your URL for <code>public_spreadsheet_url</code></p>
+<pre><code>&lt;script type=&quot;text/javascript&quot;&gt;
+  window.onload = function() { init() };
+
+  var public_spreadsheet_url = &#39;https://docs.google.com/spreadsheet/pub?hl=en_US&amp;hl=en_US&amp;key=0AmYzu_s7QHsmdDNZUzRlYldnWTZCLXdrMXlYQzVxSFE&amp;output=html&#39;;
+
+  function init() {
+    Tabletop.init( { key: public_spreadsheet_url,
+                     callback: showInfo,
+                     simpleSheet: true } )
+  }
+
+  function showInfo(data, tabletop) {
+    alert(&quot;Successfully processed!&quot;)
+    console.log(data);
+  }
+&lt;/script&gt;</code></pre>
+<p>Open up your console and check out the data that you got. All of those rows were turned right into objects! <strong>See how easy that was?</strong> </p>
+<p>Please don&#39;t hold<code>window.onload</code> against me, you&#39;re free to use <code>$(document).ready</code> and all of that jQuery jazz.</p>
+<h3>3) Honestly, that&#39;s it.</h3>
+<p>Check out the reference and the examples, but basically you&#39;re set. The only thing to think about right <em>now</em> is if you want to deal with multiple sheets you can get rid of <code>simpleSheet: true</code> (more on that later).</p>
+<p>You might also be interested in the publishing/republishing/publish-as-it-changes aspects of Google Spreadsheets, but you&#39;ll need to google that for any specifics.</p>
+<h1>Reference</h1>
+<h2>The Moving Parts</h2>
+<h3>Tabletop initialization</h3>
+<p>The simplest Tabletop initialization works like this</p>
+<pre><code>var tabletop = Tabletop.init( { key: public_spreadsheet_url, callback: showInfo } )</code></pre>
+<p>With a function living somewhere else called <code>showInfo</code>.</p>
+<p>You pass in either <code>key</code> as the actual spreadsheet key, or just the full published-spreadsheet URL. It calls showInfo when done, passing an array of models. Options in general are</p>
+<p><code>key</code> is the key of the published spreadsheet or the URL of the published spreadsheet.</p>
+<p><code>callback</code> is the callback for when the data has been successfully pulled. It will be passed an object containing the models found in the spreadsheet (worksheets =&gt; models), and the tabletop instance. Each of these models contains the rows on that worksheet (see Tabletop.Model). If simpleSheet is turned on it simply receives an array of rows of the first worksheet.</p>
+<p><code>simpleSheet</code> can be true or false (default false). It assumes you have one table and you don&#39;t care what it&#39;s called, so it sends the callback an array of rows instead of a list of models. Peek at the examples for more info.</p>
+<p><code>parseNumbers</code> can be true or false (default false). If true, Tabletop will automatically parse any numbers for you so they don&#39;t run around as strings.</p>
+<p><code>orderby</code> asks Google to sort the results by a column. You&#39;ll need to strip spaces and lowercase your column names, i.e. <code>{order: &#39;firstname&#39;}</code> for a column called <strong>First Name</strong>. You&#39;ll want to use this when you only have a single sheet, though, otherwise it will try to sort by the same column on every single sheet.</p>
+<p><code>reverse</code> reverses the order if set to true.</p>
+<p><code>postProcess</code> is a function that processes each row after it has been created. Use this to rename columns, compute attributes, etc. See the TimelineSetter example below.</p>
+<p><code>wanted</code> is an array of sheets you&#39;d like to pull. If you have 20 sheets in a public spreadsheet you might as well only pull what you need to access. See the example in simple/multiple.html. Defaults to all.</p>
+<p><code>endpoint</code> is the protocol and domain you&#39;d like to query for your spreadsheet. Defaults to <code>https://spreadsheets.google.com</code>.</p>
+<p><code>singleton</code> assigned the instantiated Tabletop object to Tabletop.singleton, implemented to simplify caching and proxying of requests. Defaults to <code>false</code>.</p>
+<p><code>simple_url</code>, if true, changes all requests to <code>KEY</code> and <code>KEY-SHEET_ID</code>. Defaults to <code>false</code>.</p>
+<p><code>proxy</code> allows you to easily use spreadsheets not located on Google Spreadsheet servers. Setting <code>proxy: &quot;http://www.proxy.com&quot;</code> is equivalent to setting <code>{ simple_url: true, singleton: true, endpoint: &quot;http://www.proxy.com&quot; }</code>. <a href="https://github.com/jsoma/flatware">Flatware</a> might provide better documentation.</p>
+<p><code>wait</code> prevents tabletop from pulling the Google spreadsheet until you&#39;re ready. Used in the backbone.js example.</p>
+<p><code>query</code> sends a <a href="https://developers.google.com/google-apps/spreadsheets/#sending_a_structured_query_for_rows">structured query</a> along with the spreadsheet request, so you can ask for rows with <code>age &gt; 55</code> and the like. Right now it&#39;s passed with <em>every request</em>, though, so if you&#39;re using multiple tables you&#39;ll end up in Problem City. It should work great with <code>simpleSheet</code> situations, though.</p>
+<p><code>debug</code> returns on debug mode, which gives you plenty of messaging about what&#39;s going on under the hood.</p>
+<p><code>parameterize</code> changes the src of all injected scripts. Instead of <code>src</code>, <code>src</code> is URI encoded and appended to <code>parameterize</code>, e.g. set it to <code>http://example.herokuapp.com/?url=</code>. Mostly for <a href="https://github.com/MinnPost/gs-proxy">gs-proxy</a>.</p>
+<p><code>callbackContext</code> sets the <code>this</code> for your callback. It&#39;s the tabletop object by default.</p>
+<h3>Tabletop itself</h3>
+<p>Once you&#39;ve initialized a <code>tabletop</code> object you can access its good parts.</p>
+<p><code>.sheets()</code> are the <code>Tabletop.Model</code>s that were populated, one per worksheet. You access a sheet by its name. </p>
+<p><code>.sheets(name)</code> is how you access a specific sheet. Say I have a worksheet called <strong>Cats I Know</strong>, I&#39;ll access it via <code>tabletop.sheets(&quot;Cats I Know&quot;)</code></p>
+<p><code>.model_names</code> are the names of the models [read: sheets] that Tabletop knows about</p>
+<p><code>.data()</code> returns the rows of the first model if you&#39;re in simpleSheet mode. It&#39;s the same as <code>.sheets()</code> otherwise. This is just a little sugar.</p>
+<p><code>.fetch()</code> manually initializes a pulling of the data</p>
+<p><code>.addWanted(name)</code> adds a sheet to the list that are updated with <code>.fetch</code></p>
+<h3>Tabletop.Model</h3>
+<p>Tabletop.Model is pretty boring, let&#39;s be honest.</p>
+<p><code>.name</code> is the name of the worksheet it came from (the tab at the bottom of the spreadsheet)</p>
+<p><code>.column_names</code> gives you the names of the columns in that table</p>
+<p><code>.all()</code> returns an array of the rows of the table, in the style of <code>[ { name: &quot;Tom&quot;, age: 5}, { name: &quot;Liz&quot;, age: 12 } ]</code></p>
+<p><code>.toArray()</code> returns the rows of the table with numbered indices instead of named ones [ [ &quot;Tom&quot;, 5] , [ &quot;Liz&quot;, 12 ] ]</p>
+<h2>What the hell do I do with this?</h2>
+<p>Imagine it&#39;s a read-only, JavaScript CMS that you can edit through Google Docs. It&#39;s like <em>Christmas</em> up in here.</p>
+<h3>Working with Tabletop and Handlebars</h3>
+<p>Super easy. Just feed the models to Handlebars and you&#39;re all set to build the templates.</p>
+<h3>Working with Tabletop and Backbone.js</h3>
+<p>I&#39;ve put together a Backbone.tabletopSync driver for Backbone collections and models. It&#39;s read-only, but you can&#39;t really complain if you&#39;re powering your Backbone app through Google Spreadsheets.</p>
+<p>Source is, of course, in <code>/src</code>, and you can check it out in action in <code>/examples/backbone/</code></p>
+<h3>Working with Tabletop and TimelineSetter</h3>
+<p>Tabletop was originally built to work with ProPublica&#39;s <a href="http://propublica.github.com/timeline-setter/">TimelineSetter</a>, a JS+Ruby library that creates timelines. You need some specifically-formatted JSON which is created by a Ruby script from a CSV, which means your workflow is usually spreadsheet -&gt; CSV -&gt; Ruby -&gt; JSON -&gt; JS.</p>
+<p>With Tabletop, though, you get to hook right into a Google Spreadsheet for all of your info! You just need to massage your data a <em>little</em> bit, thanks to Google&#39;s API messing with column names and you needing a timestamp.</p>
+<p>You can see this in the examples directory, but here are the important parts.</p>
+<pre><code>&lt;script type=&quot;text/javascript&quot;&gt;
+  var public_spreadsheet_url = &quot;https://docs.google.com/spreadsheet/pub?hl=en_US&amp;hl=en_US&amp;key=0AmYzu_s7QHsmdHk2akhfdG5iTk96OUt6UjJJX1dYMFE&amp;single=true&amp;gid=0&amp;output=html&quot;
+
+  $(document).ready( function() {
+     /* 
+      Need to post-process elements because Google Spreadsheets abbreviates 
+        &#39;display_date&#39; column as &#39;displaydate&#39; and you need to parse the date
+        into the &#39;timestamp&#39; field for TimelineSetter
+      simpleSheet: true sends array of rows to callback, so you don&#39;t need to
+        do the whole Tabletop.sheets(&#39;Sheet1&#39;).all() thing.
+    */
+    Tabletop.init( { key: public_spreadsheet_url,
+                     callback: drawTimeline,
+                     simpleSheet: true,
+                     postProcess: function(element) {
+                       element[&quot;display_date&quot;] = element[&quot;displaydate&quot;];
+                       element[&quot;timestamp&quot;] = Date.parse( element[&quot;date&quot;] );
+                     } 
+    })
+  })
+
+  function drawTimeline(data, tabletop) {
+    var currentTimeline = TimelineSetter.Timeline.boot(
+      data,
+      {&quot;container&quot;:&quot;#timeline&quot;,&quot;interval&quot;:&quot;&quot;}
+    );
+  }
+&lt;/script&gt;</code></pre>
+<p>See the <code>postProcess</code> call? That&#39;s called on every row after Tabletop.Model gets done working on it. It allows you to rename columns or edit data points without having to messily do it outside of Tabletop. I&#39;m sure it has uses outside of TimelineSetter, too.</p>
+<p>A sample lives in <code>/examples/timeline_setter/</code></p>
+<h2>Caching/Proxying Google Spreadsheets</h2>
+<p>Yeah, Google Spreadsheets can sometimes be slow or sometimes be overwhelmed or <em>maybe</em> one day Google will just up and disappear on us. So Tabletop.js now supports fetching your data from elsewhere, using options like <code>endpoint</code> and <code>proxy</code>.</p>
+<p><code>proxy</code> is the fun one, in that it rewrites your requests to be simpler-looking and plays nicely with the app &amp; example I put together.</p>
+<h3>Using Flatware</h3>
+<p>If you don&#39;t mind running around with Heroku and AWS, <a href="https://github.com/jsoma/flatware">Flatware</a> is an app I built that uploads the spreadsheet JSON response to S3.</p>
+<h3>Using table-service</h3>
+<p><a href="https://github.com/martinburch/table-service">table-service</a> hosts it on your own server using a python script, and auto-updates thanks to a tiny script you add to your spreadsheet.</p>
+<h3>Using gs-proxy</h3>
+<p><a href="https://github.com/MinnPost/gs-proxy">gs-proxy</a> is another option that also uses Heroku. You&#39;ll set <code>parameterize</code> to something like <code>http://example.herokuapp.com/?url=</code> and off you go!</p>
+<h3>Using other caching</h3>
+<p>You can point <code>proxy</code> at anything you&#39;d like as long as it has <code>KEY</code> and <code>KEY-SHEET_ID</code> files sitting in a directory. Feel free to host it on your own server! You can use <code>/caching/local.rb</code> if you want a pretty easy solution for generating the flat files.</p>
+<h1>Notes</h1>
+<h2>Strange behavior</h2>
+<p><strong>Empty tables are trouble.</strong> We can&#39;t get column names from them (c&#39;mon, Google!), so don&#39;t be too confused when a table with 0 rows is coming back with an empty <code>.column_names</code> or your code starts throwing weird errors when processing the results.</p>
+<p><strong>Empty rows are trouble.</strong> If you have a row that&#39;s completely empty, Google doesn&#39;t return any rows after the empty row. As a result, you need to make sure every line in your spreadsheet has data in it.</p>
+<h2>If you are having trouble</h2>
+<p>Turn on debugging by passing <code>debug: true</code> when you initialize Tabletop. Check out the console, I try to keep my error messages chatty and informative. Or just email me at <a href="mailto:jonathan.soma@gmail.com">jonathan.soma@gmail.com</a>, I&#39;m happy to help!</p>
+<h2>Tabletop.js in the wild</h2>
+<p><strong>The more examples the better, right?</strong> Feel free to fork or contact me if you have a good example of something you&#39;ve done.</p>
+<p>A <a href="http://www.aljazeera.com/indepth/interactive/2012/04/20124107156511888.html">contextual video player</a> with <a href="http://popcornjs.org">popcorn.js</a> by <a href="https://twitter.com/maboa">@maboa</a> </p>
+<p>The <a href="http://project.wnyc.org/elections/mayor-tracker/">WNYC mayoral tracker</a> uses Tabletop along with <a href="http://backbonejs.org">Backbone.js</a></p>
+<p>A <a href="http://builtbybalance.com/github-timeline/">Facebook-esque timeline</a> from <a href="http://builtbybalance.com">Balance Media</a> (with a <a href="https://github.com/balancemedia/Timeline">git repo</a>)</p>
+<p><a href="https://github.com/jsoma/mapsheet">Mapsheet</a> creates super easy, customizable maps.</p>
+<h2>Other Options</h2>
+<p>If you aren&#39;t really feeling Tabletop, you should give <a href="http://misoproject.com/dataset/">Dataset</a> a shot. It&#39;s &quot;a JavaScript client-side data transformation and management library,&quot; which means it does a hell of a lot more than our dear Tabletop.</p>
+<h2>Credits</h2>
+<p><a href="http://twitter.com/dangerscarf">Jonathan Soma</a>, who would rather be cooking than coding. Inspired by the relentless demands of <a href="https://twitter.com/jkeefe">John Keefe</a> of WNYC.</p>
+<p>Thanks to <a href="https://github.com/plainview">Scott Seaward</a> for implementing multi-instance Tabletop.</p>
+<p><a href="https://github.com/zzolo">Alan Palazzolo</a> hooked the world up with <a href="https://github.com/MinnPost/gs-proxy">gs-proxy</a> and added support for it into Tabletop via <code>parameterize</code></p>
+<p><a href="https://github.com/maxogden">Max Ogden</a> was kind enough to lend Tabletop nodejs support as part of an <a href="http://www.mozillaopennews.org">Open News</a> <a href="http://www.mozillaopennews.org/codesprints.html">code sprint</a></p>
+</div><footer><h3>Made by <a href="http://bobtheasian.com">@bobtheasian </a>and <a href="http://krrishd.github.io">@krrishd</a></h3></footer></body></html>
