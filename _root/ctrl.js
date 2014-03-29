@@ -23,6 +23,19 @@ function homeCtrl($scope, $http) {
 		$scope.data = data;
 		$scope.$apply();
 	}
+	var reloadData = function() {
+		Tabletop.init({
+			key: '0Ah4ub_GLQC5OdExES0hSaHNJRzIzS0FtNzZHdWRQQVE',
+			callback: storeData,
+			simpleSheet: true
+		});
+	
+		function storeData(data, tabletop) {
+			$scope.data = data;
+			$scope.$apply();
+		}	
+	}
+	setInterval(reloadData(), 30000);
 }
 
 function submitCtrl($scope) {
