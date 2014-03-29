@@ -20,7 +20,7 @@ function homeCtrl($scope, $http) {
 	});
 	
 	function storeData(data, tabletop) {
-		$scope.data = data;
+		$scope.data = data.reverse();
 		$scope.$apply();
 	}
 	var reloadData = function() {
