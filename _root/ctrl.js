@@ -41,12 +41,12 @@ function homeCtrl($scope, $http) {
 function submitCtrl($scope) {
 	document.querySelector('.submit').addEventListener('click', function(e) {
 		e.preventDefault();
-		if(document.querySelector('textarea').value.length > 500) {
-			var excess = document.querySelector('textarea').value.length - 500;	
+		if(document.querySelector('textarea').value.length > 800) {
+			var excess = document.querySelector('textarea').value.length - 800;	
 			alert('You have exceeded the word limit by ' + excess + ' words. Try cutting it down a bit, even though you love DECA so much :)');
 		}
 		else if(document.querySelector('.title').value.length > 40) {
-			var excess =  document.querySelector('.title').value.length;
+			var excess =  document.querySelector('.title').value.length - 40;
 			alert('Your story title exceeds the character limit by ' + excess + ' characters. Shorten it and try again :)');
 		}
 		else {
