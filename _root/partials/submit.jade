@@ -4,8 +4,8 @@ form(method='POST', onsubmit='submitted=true;', action='https://docs.google.com/
 	input(type="text", placeholder="State", name='entry.705420308', required)
 	input(type="text", placeholder="Chapter", name='entry.1570696832', required)
 	h2 And...Now To Write Your Story
-	input(type="text", placeholder="Story Title", name='entry.1698714643', required)
+	input.title(type="text", placeholder="Story Title", name='entry.1698714643', required)
 	textarea(name='entry.1300292103')
 		| Story Goes Here...
-	input.btn.blue(type="submit")
-	iframe(name='hidden_iframe', style="display:none;", onload='if(submitted){alert("Submitted!");window.location.hash= "#";submitted=false;}')
+	input.btn.blue.submit(type="submit")
+	iframe(name='hidden_iframe', style="display:none;", onload='submitted=false;if(submitted){alert("Submitted!");window.location.hash= "#";submitted=false;}')
