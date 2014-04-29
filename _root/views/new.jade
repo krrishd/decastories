@@ -1,0 +1,12 @@
+.stories.new
+	h1 Create New Story
+	form(ng-submit="newStory()")
+		input(type="text", placeholder="Name", ng-model="name")
+		input(type="text", placeholder="School", ng-model="chapter")
+		input(type="text", placeholder="Story Title", ng-model="title")
+		select(ng-model="state")
+			option(selected="selected", value="", disabled) Choose State
+			option(ng-repeat="s in states", value="{{ s.name }}")
+				| {{ s.name }}
+		textarea(ng-model="content")
+		input(type="submit", value="Submit") Submit

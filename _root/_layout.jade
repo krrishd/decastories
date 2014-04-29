@@ -1,24 +1,35 @@
 doctype 5
 html
 	head
-		title DECA Stories
-		link(href="main.css", rel="stylesheet", type="text/css")
-		// JS Dependencies
-		script(src="bower_components/angular/angular.min.js")
-		script(src="bower_components/angular-route/angular-route.min.js")
-		script(src="bower_components/tabletop/src/tabletop.js")
-		script(src="ctrl.js")
-	body(ng-app="decaStories")
-		header
-			h1 DECA Stories
-			nav
-				a(href="#/") Home
-				a(href="#/submit") Submit
-		.container
+		title I Am DECA - DECA Stories
+		// Dependencies
+		script(src="/lib/angular/angular.min.js")
+		script(src="/lib/angular-ui-router/release/angular-ui-router.min.js")
+		script(src="/lib/snapjs/snap.min.js")
+		script(src="/lib/angular-snap/angular-snap.min.js")
+		link(rel="stylesheet", type="text/css", href="/lib/angular-snap/angular-snap.min.css")
+		link(rel="stylesheet", type="text/css", href="/lib/ionicons/css/ionicons.min.css")
+		// Custom
+		link(rel="stylesheet", type="text/css", href="/main.css")
+		script(src="/ctrl.js")
+	body(ng-app="decaStories", ng-controller="mainCtrl")
+		div(snap-drawer)
+			ul.states
+				li.home
+					a(href="/#/") 
+						i.icon.ion-home
+						| Home
+				li.newl
+					a(href="/#/new")
+						i.icon.ion-plus-circled
+						| Create Story
+				li.state(ng-repeat="state in states")
+					a(ng-href="{{ '/#/state/' + state.abbreviation }}") {{ state.name }}
+		div(snap-content)
+			header
+				i.icon.ion-navicon-round
+				h1
+					span.iam I Am 
+					span.deca DECA
 			!= yield
-		footer
-			h3
-				| Made by 
-				a(href="http://bobtheasian.com") @bobtheasian 
-				| and 
-				a(href="http://krrishd.github.io") @krrishd
+			

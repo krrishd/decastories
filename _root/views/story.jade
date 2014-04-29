@@ -1,0 +1,5 @@
+.storyContent
+	h2 {{ story.title }}
+	p.by {{ story.name + " - " + story.chapter + ", " + story.state }}
+	.content
+		p(style="white-space:pre-wrap;") {{ story.content }}

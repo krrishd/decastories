@@ -1,0 +1,9 @@
+h1 {{ state.name }}
+.stories
+	.story(ng-repeat="story in stories")
+		h3.title 
+			a(ng-href="{{ '/#/story/' + story._id }}") {{ story.title }}
+		p.blurb {{ story.content.substr(0,125) + "..." }}
+		.author
+			p.name {{ story.name }}
+			p.location {{ story.chapter + ", " + story.state }}
