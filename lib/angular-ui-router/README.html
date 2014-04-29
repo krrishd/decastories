@@ -1,0 +1,218 @@
+<!DOCTYPE html><html><head><title>I Am DECA - DECA Stories</title><!-- Dependencies--><script src="/lib/angular/angular.min.js"></script><script src="/lib/angular-ui-router/release/angular-ui-router.min.js"></script><script src="/lib/snapjs/snap.min.js"></script><script src="/lib/angular-snap/angular-snap.min.js"></script><link rel="stylesheet" type="text/css" href="/lib/angular-snap/angular-snap.min.css"><link rel="stylesheet" type="text/css" href="/lib/ionicons/css/ionicons.min.css"><!-- Custom--><link rel="stylesheet" type="text/css" href="/main.css"><script src="/ctrl.js"></script></head><body ng-app="decaStories" ng-controller="mainCtrl"><div snap-drawer><ul class="states"><li class="home"><a href="/#/"> <i class="icon ion-home"></i>Home</a></li><li class="newl"><a href="/#/new"><i class="icon ion-plus-circled"></i>Create Story</a></li><li ng-repeat="state in states" class="state"><a ng-href="{{ '/#/state/' + state.abbreviation }}">{{ state.name }}</a></li></ul></div><div snap-content><header><i class="icon ion-navicon-round"></i><h1><span class="iam">I Am </span><span class="deca">DECA</span></h1></header><h1>AngularUI Router &nbsp;<a href="https://travis-ci.org/angular-ui/ui-router"><img src="https://travis-ci.org/angular-ui/ui-router.png?branch=master" alt="Build Status"></a></h1>
+<h4>The de-facto solution to flexible routing with nested views</h4>
+<hr>
+<p><strong><a href="http://angular-ui.github.io/ui-router/release/angular-ui-router.js">Download 0.2.10</a></strong> (or <strong><a href="http://angular-ui.github.io/ui-router/release/angular-ui-router.min.js">Minified</a></strong>) <strong>|</strong>
+<strong><a href="#resources">Learn</a> |</strong>
+<strong><a href="http://angular-ui.github.io/ui-router/site">API</a> |</strong>
+<strong><a href="https://groups.google.com/forum/#!categories/angular-ui/router">Discuss</a> |</strong>
+<strong><a href="http://stackoverflow.com/questions/ask?tags=angularjs,angular-ui-router">Get Help</a> |</strong>
+<strong><a href="#report-an-issue">Report an Issue</a> |</strong>
+<strong><a href="#contribute">Contribute</a></strong></p>
+<hr>
+<p>AngularUI Router is a routing framework for <a href="http://angularjs.org">AngularJS</a>, which allows you to organize the
+parts of your interface into a <a href="https://en.wikipedia.org/wiki/Finite-state_machine"><em>state machine</em></a>. Unlike the
+<a href="http://docs.angularjs.org/api/ngRoute.$route"><code>$route</code> service</a> in Angular core, which is organized around URL
+routes, UI-Router is organized around <a href="https://github.com/angular-ui/ui-router/blob/master/sample/states.js#L28-L269"><em>states</em></a>,
+which may optionally have routes, as well as other behavior, attached.</p>
+<p>States are bound to <em>named</em>, <em>nested</em> and <em>parallel views</em>, allowing you to powerfully manage your application&#39;s interface.</p>
+<p>-
+<strong>Note:</strong> <em>UI-Router is under active development. As such, while this library is well-tested, the API may change. Consider using it in production applications only if you&#39;re comfortable following a changelog and updating your usage accordingly.</em></p>
+<h2>Get Started</h2>
+<p><strong>(1)</strong> Get UI-Router in one of 4 ways:
+ - clone &amp; <a href="#developing">build</a> this repository
+ - <a href="http://angular-ui.github.io/ui-router/release/angular-ui-router.js">download the release</a> (or <a href="http://angular-ui.github.io/ui-router/release/angular-ui-router.min.js">minified</a>)
+ - via <strong><a href="http://bower.io/">Bower</a></strong>: by running <code>$ bower install angular-ui-router</code> from your console
+ - or via <strong><a href="https://github.com/component/component">Component</a></strong>: by running <code>$ component install angular-ui/ui-router</code> from your console</p>
+<p><strong>(2)</strong> Include <code>angular-ui-router.js</code> (or <code>angular-ui-router.min.js</code>) in your <code>index.html</code>, after including Angular itself (For Component users: ignore this step)</p>
+<p><strong>(3)</strong> Add <code>&#39;ui.router&#39;</code> to your main module&#39;s list of dependencies (For Component users: replace <code>&#39;ui.router&#39;</code> with <code>require(&#39;angular-ui-router&#39;)</code>)</p>
+<p>When you&#39;re done, your setup should look similar to the following:</p>
+<p>&gt;</p>
+<pre><code class="language-html">&lt;!doctype html&gt;
+&lt;html ng-app=&quot;myApp&quot;&gt;
+&lt;head&gt;
+    &lt;script src=&quot;//ajax.googleapis.com/ajax/libs/angularjs/1.1.5/angular.min.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;js/angular-ui-router.min.js&quot;&gt;&lt;/script&gt;
+    &lt;script&gt;
+        var myApp = angular.module(&#39;myApp&#39;, [&#39;ui.router&#39;]);
+        // For Component users, it should look like this:
+        // var myApp = angular.module(&#39;myApp&#39;, [require(&#39;angular-ui-router&#39;)]);
+    &lt;/script&gt;
+    ...
+&lt;/head&gt;
+&lt;body&gt;
+    ...
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+<h3>Nested States &amp; Views</h3>
+<p>The majority of UI-Router&#39;s power is in its ability to nest states &amp; views.</p>
+<p><strong>(1)</strong> First, follow the <a href="#get-started">setup</a> instructions detailed above.</p>
+<p><strong>(2)</strong> Then, add a <a href="https://github.com/angular-ui/ui-router/wiki/Quick-Reference#ui-view"><code>ui-view</code> directive</a> to the <code>&lt;body /&gt;</code> of your app.</p>
+<p>&gt;</p>
+<pre><code class="language-html">&lt;!-- index.html --&gt;
+&lt;body&gt;
+    &lt;div ui-view&gt;&lt;/div&gt;
+    &lt;!-- We&#39;ll also add some navigation: --&gt;
+    &lt;a ui-sref=&quot;state1&quot;&gt;State 1&lt;/a&gt;
+    &lt;a ui-sref=&quot;state2&quot;&gt;State 2&lt;/a&gt;
+&lt;/body&gt;</code></pre>
+<p><strong>(3)</strong> You&#39;ll notice we also added some links with <a href="https://github.com/angular-ui/ui-router/wiki/Quick-Reference#ui-sref"><code>ui-sref</code> directives</a>. In addition to managing state transitions, this directive auto-generates the <code>href</code> attribute of the <code>&lt;a /&gt;</code> element it&#39;s attached to, if the corresponding state has a URL. Next we&#39;ll add some templates. These will plug into the <code>ui-view</code> within <code>index.html</code>. Notice that they have their own <code>ui-view</code> as well! That is the key to nesting states and views.</p>
+<p>&gt;</p>
+<pre><code class="language-html">&lt;!-- partials/state1.html --&gt;
+&lt;h1&gt;State 1&lt;/h1&gt;
+&lt;hr/&gt;
+&lt;a ui-sref=&quot;state1.list&quot;&gt;Show List&lt;/a&gt;
+&lt;div ui-view&gt;&lt;/div&gt;</code></pre>
+<pre><code class="language-html">&lt;!-- partials/state2.html --&gt;
+&lt;h1&gt;State 2&lt;/h1&gt;
+&lt;hr/&gt;
+&lt;a ui-sref=&quot;state2.list&quot;&gt;Show List&lt;/a&gt;
+&lt;div ui-view&gt;&lt;/div&gt;</code></pre>
+<p><strong>(4)</strong> Next, we&#39;ll add some child templates. <em>These</em> will get plugged into the <code>ui-view</code> of their parent state templates.</p>
+<p>&gt;</p>
+<pre><code class="language-html">&lt;!-- partials/state1.list.html --&gt;
+&lt;h3&gt;List of State 1 Items&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li ng-repeat=&quot;item in items&quot;&gt;{{ item }}&lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+<p>&gt;</p>
+<pre><code class="language-html">&lt;!-- partials/state2.list.html --&gt;
+&lt;h3&gt;List of State 2 Things&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li ng-repeat=&quot;thing in things&quot;&gt;{{ thing }}&lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+<p><strong>(5)</strong> Finally, we&#39;ll wire it all up with <code>$stateProvider</code>. Set up your states in the module config, as in the following:</p>
+<p>&gt;</p>
+<pre><code class="language-javascript">myApp.config(function($stateProvider, $urlRouterProvider) {
+  //
+  // For any unmatched url, redirect to /state1
+  $urlRouterProvider.otherwise(&quot;/state1&quot;);
+  //
+  // Now set up the states
+  $stateProvider
+    .state(&#39;state1&#39;, {
+      url: &quot;/state1&quot;,
+      templateUrl: &quot;partials/state1.html&quot;
+    })
+    .state(&#39;state1.list&#39;, {
+      url: &quot;/list&quot;,
+      templateUrl: &quot;partials/state1.list.html&quot;,
+      controller: function($scope) {
+        $scope.items = [&quot;A&quot;, &quot;List&quot;, &quot;Of&quot;, &quot;Items&quot;];
+      }
+    })
+    .state(&#39;state2&#39;, {
+      url: &quot;/state2&quot;,
+      templateUrl: &quot;partials/state2.html&quot;
+    })
+    .state(&#39;state2.list&#39;, {
+      url: &quot;/list&quot;,
+        templateUrl: &quot;partials/state2.list.html&quot;,
+        controller: function($scope) {
+          $scope.things = [&quot;A&quot;, &quot;Set&quot;, &quot;Of&quot;, &quot;Things&quot;];
+        }
+      })
+    });</code></pre>
+<p><strong>(6)</strong> See this quick start example in action.</p>
+<blockquote>
+<p><strong><a href="http://plnkr.co/edit/u18KQc?p=preview">Go to Quick Start Plunker for Nested States &amp; Views</a></strong></p>
+</blockquote>
+<p><strong>(7)</strong> This only scratches the surface</p>
+<blockquote>
+<p><strong><a href="https://github.com/angular-ui/ui-router/wiki">Dive Deeper!</a></strong></p>
+</blockquote>
+<h3>Multiple &amp; Named Views</h3>
+<p>Another great feature is the ability to have multiple <code>ui-view</code>s view per template.</p>
+<p><strong>Pro Tip:</strong> <em>While multiple parallel views are a powerful feature, you&#39;ll often be able to manage your
+interfaces more effectively by nesting your views, and pairing those views with nested states.</em></p>
+<p><strong>(1)</strong> Follow the <a href="#get-started">setup</a> instructions detailed above.</p>
+<p><strong>(2)</strong> Add one or more <code>ui-view</code> to your app, give them names.
+&gt;</p>
+<pre><code class="language-html">&lt;!-- index.html --&gt;
+&lt;body&gt;
+    &lt;div ui-view=&quot;viewA&quot;&gt;&lt;/div&gt;
+    &lt;div ui-view=&quot;viewB&quot;&gt;&lt;/div&gt;
+    &lt;!-- Also a way to navigate --&gt;
+    &lt;a ui-sref=&quot;route1&quot;&gt;Route 1&lt;/a&gt;
+    &lt;a ui-sref=&quot;route2&quot;&gt;Route 2&lt;/a&gt;
+&lt;/body&gt;</code></pre>
+<p><strong>(3)</strong> Set up your states in the module config:
+&gt;</p>
+<pre><code class="language-javascript">myApp.config(function($stateProvider) {
+  $stateProvider
+    .state(&#39;index&#39;, {
+      url: &quot;&quot;,
+      views: {
+        &quot;viewA&quot;: { template: &quot;index.viewA&quot; },
+        &quot;viewB&quot;: { template: &quot;index.viewB&quot; }
+      }
+    })
+    .state(&#39;route1&#39;, {
+      url: &quot;/route1&quot;,
+      views: {
+        &quot;viewA&quot;: { template: &quot;route1.viewA&quot; },
+        &quot;viewB&quot;: { template: &quot;route1.viewB&quot; }
+      }
+    })
+    .state(&#39;route2&#39;, {
+      url: &quot;/route2&quot;,
+      views: {
+        &quot;viewA&quot;: { template: &quot;route2.viewA&quot; },
+        &quot;viewB&quot;: { template: &quot;route2.viewB&quot; }
+      }
+    })
+});</code></pre>
+<p><strong>(4)</strong> See this quick start example in action.</p>
+<blockquote>
+<p><strong><a href="http://plnkr.co/edit/SDOcGS?p=preview">Go to Quick Start Plunker for Multiple &amp; Named Views</a></strong></p>
+</blockquote>
+<h2>Resources</h2>
+<ul>
+<li><a href="https://github.com/angular-ui/ui-router/wiki">In-Depth Guide</a></li>
+<li><a href="http://angular-ui.github.io/ui-router/site">API Reference</a></li>
+<li><a href="http://angular-ui.github.com/ui-router/sample/">Sample App</a> (<a href="https://github.com/angular-ui/ui-router/tree/gh-pages/sample">Source</a>)</li>
+<li><a href="https://github.com/angular-ui/ui-router/wiki/Frequently-Asked-Questions">FAQ</a></li>
+<li><a href="https://egghead.io/lessons/angularjs-introduction-ui-router">Introduction Video</a></li>
+<li><a href="http://slid.es/timkindberg/ui-router#/">Slides comparing ngRoute to ui-router</a></li>
+</ul>
+<h2>Report an Issue</h2>
+<p>Help us make UI-Router better! If you think you might have found a bug, or some other weirdness, start by making sure
+it hasn&#39;t already been reported. You can <a href="https://github.com/angular-ui/ui-router/search?q=wat%3F&amp;type=Issues">search through existing issues</a>
+to see if someone&#39;s reported one similar to yours.</p>
+<p>If not, then <a href="http://plnkr.co/edit/u18KQc?p=preview">create a plunkr</a> that demonstrates the problem (try to use as little code
+as possible: the more minimalist, the faster we can debug it).</p>
+<p>Next, <a href="https://github.com/angular-ui/ui-router/issues/new">create a new issue</a> that briefly explains the problem,
+and provides a bit of background as to the circumstances that triggered it. Don&#39;t forget to include the link to
+that plunkr you created!</p>
+<p><strong>Note</strong>: If you&#39;re unsure how a feature is used, or are encountering some unexpected behavior that you aren&#39;t sure
+is a bug, it&#39;s best to talk it out in the
+<a href="https://groups.google.com/forum/#!categories/angular-ui/router">Google Group</a> or on
+<a href="http://stackoverflow.com/questions/ask?tags=angularjs,angular-ui-router">StackOverflow</a> before reporting it. This
+keeps development streamlined, and helps us focus on building great software.</p>
+<p>Please keep in mind that the issue tracker is for <em>issues</em>. Please do <em>not</em> post an issue if you need help or support. Instead, see one of the above-mentioned forums or <a href="irc://irc.freenode.net/#angularjs">IRC</a>.</p>
+<h2>Contribute</h2>
+<p><strong>(1)</strong> See the <strong><a href="#developing">Developing</a></strong> section below, to get the development version of UI-Router up and running on your local machine.</p>
+<p><strong>(2)</strong> Check out the <a href="https://github.com/angular-ui/ui-router/issues/milestones">roadmap</a> to see where the project is headed, and if your feature idea fits with where we&#39;re headed.</p>
+<p><strong>(3)</strong> If you&#39;re not sure, <a href="https://github.com/angular-ui/ui-router/issues/new?title=RFC:%20My%20idea">open an RFC</a> to get some feedback on your idea.</p>
+<p><strong>(4)</strong> Finally, commit some code and open a pull request. Code &amp; commits should abide by the following rules:</p>
+<ul>
+<li><em>Always</em> have test coverage for new features (or regression tests for bug fixes), and <em>never</em> break existing tests</li>
+<li>Commits should represent one logical change each; if a feature goes through multiple iterations, squash your commits down to one</li>
+<li>Make sure to follow the <a href="https://github.com/angular/angular.js/blob/master/CONTRIBUTING.md#commit-message-format">Angular commit message format</a> so your change will appear in the changelog of the next release.</li>
+<li>Changes should always respect the coding style of the project</li>
+</ul>
+<h2>Developing</h2>
+<p>UI-Router uses <code>grunt &gt;= 0.4.x</code>. Make sure to upgrade your environment and read the
+<a href="http://gruntjs.com/upgrading-from-0.3-to-0.4">Migration Guide</a>.</p>
+<p>Dependencies for building from source and running tests:</p>
+<ul>
+<li><a href="https://github.com/gruntjs/grunt-cli">grunt-cli</a> - run: <code>$ npm install -g grunt-cli</code></li>
+<li>Then, install the development dependencies by running <code>$ npm install</code> from the project directory</li>
+</ul>
+<p>There are a number of targets in the gruntfile that are used to generating different builds:</p>
+<ul>
+<li><code>grunt</code>: Perform a normal build, runs jshint and karma tests</li>
+<li><code>grunt build</code>: Perform a normal build</li>
+<li><code>grunt dist</code>: Perform a clean build and generate documentation</li>
+<li><code>grunt dev</code>: Run dev server (sample app) and watch for changes, builds and runs karma tests on changes.</li>
+</ul>
+</div></body></html>

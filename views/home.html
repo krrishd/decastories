@@ -1,0 +1,1 @@
+<h1>Home</h1><div class="stories"><div ng-repeat="story in stories" class="story"><h3 class="title"> <a ng-href="{{ '/#/story/' + story._id }}">{{ story.title }}</a></h3><p class="blurb">{{ story.content.substr(0,125) + "..." }}</p><div class="author"><p class="name">{{ story.name }}</p><p class="location">{{ story.chapter + ", " + story.state }}</p></div></div></div>

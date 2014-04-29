@@ -1,0 +1,245 @@
+<!DOCTYPE html><html><head><title>I Am DECA - DECA Stories</title><!-- Dependencies--><script src="/lib/angular/angular.min.js"></script><script src="/lib/angular-ui-router/release/angular-ui-router.min.js"></script><script src="/lib/snapjs/snap.min.js"></script><script src="/lib/angular-snap/angular-snap.min.js"></script><link rel="stylesheet" type="text/css" href="/lib/angular-snap/angular-snap.min.css"><link rel="stylesheet" type="text/css" href="/lib/ionicons/css/ionicons.min.css"><!-- Custom--><link rel="stylesheet" type="text/css" href="/main.css"><script src="/ctrl.js"></script></head><body ng-app="decaStories" ng-controller="mainCtrl"><div snap-drawer><ul class="states"><li class="home"><a href="/#/"> <i class="icon ion-home"></i>Home</a></li><li class="newl"><a href="/#/new"><i class="icon ion-plus-circled"></i>Create Story</a></li><li ng-repeat="state in states" class="state"><a ng-href="{{ '/#/state/' + state.abbreviation }}">{{ state.name }}</a></li></ul></div><div snap-content><header><i class="icon ion-navicon-round"></i><h1><span class="iam">I Am </span><span class="deca">DECA</span></h1></header><h1>Snap.js</h1>
+<p>A Library for creating beautiful mobile shelfs in Javascript</p>
+<p><a href="http://www.screenr.com/embed/0EJ7" target="_blank">View Video Preview</a></p>
+<p><a href="http://jakiestfu.github.io/Snap.js/" target="_blank">View Demos</a></p>
+<p><a href="http://www.screenr.com/embed/0EJ7" target="_blank"><img src="http://i.imgur.com/t3mGcEx.gif"></a></p>
+<ul>
+<li><a href="#features">Features</a></li>
+<li><a href="#support">Support</a></li>
+<li><a href="#installation">Installation</a></li>
+<li><a href="#usage">Usage</a></li>
+<li><a href="#settings-and-defaults">Settings &amp; Defaults</a></li>
+<li><a href="#public-methods">Public Methods</a></li>
+<li><a href="#gotchas">Gotchas</a></li>
+<li><a href="#faq">FAQ&#39;s</a></li>
+<li><a href="#compliments">Compliments</a></li>
+<li><a href="#licensing">Licensing</a></li>
+<li><a href="#extras">Extras</a></li>
+</ul>
+<h2>Features</h2>
+<ul>
+<li>Library Independent</li>
+<li>High Customization</li>
+<li>Flick Support</li>
+<li>User Intent Detection</li>
+<li>Disable Hyperextension</li>
+<li>Event Hooks</li>
+<li>CSS3 Powered Animations with IE fallbacks</li>
+<li>Drag Support</li>
+<li>Drag Handle Support</li>
+<li>Programatic API</li>
+<li>&quot;No-Drag&quot; Elements</li>
+<li>Definable Easing Mode</li>
+<li>Enable/Disable Events</li>
+<li>Disabled Sides (left or right)</li>
+<li>Supports <a href="http://maker.github.com/ratchet/">Ratchet</a> (with templates!)</li>
+</ul>
+<h2>Support</h2>
+<ul>
+<li>Firefox 10+</li>
+<li>Wide Webkit Support (including Android WebKit 2.3.X)</li>
+<li>IE 10</li>
+<li>IE 9 Supports Toggling, Dragging but no Transitions</li>
+<li>IE 7/8 Supports Toggling but no dragging or Transitions</li>
+</ul>
+<h2>Installation</h2>
+<p>As standalone just include the file in a script tag:</p>
+<pre><code class="language-html">&lt;script src=&quot;snap.js&quot;&gt;&lt;/script&gt;</code></pre>
+<p>As a <a href="http://component.io" target="_blank">web component</a> do:</p>
+<pre><code class="language-shell">$ component install jakiestfu/Snap.js</code></pre>
+<h2>Usage</h2>
+<pre><code class="language-javascript">var snapper = new Snap({
+  element: document.getElementById(&#39;content&#39;)
+});</code></pre>
+<h2>Settings and Defaults</h2>
+<pre><code class="language-javascript">settings = {
+    element: null,
+    dragger: null,
+    disable: &#39;none&#39;,
+    addBodyClasses: true,
+    hyperextensible: true,
+    resistance: 0.5,
+    flickThreshold: 50,
+    transitionSpeed: 0.3,
+    easing: &#39;ease&#39;,
+    maxPosition: 266,
+    minPosition: -266,
+    tapToClose: true,
+    touchToDrag: true,
+    slideIntent: 40,
+    minDragDistance: 5
+}</code></pre>
+<ul>
+<li><code>element</code>: The element which the user will be sliding side to side</li>
+<li><code>dragger</code>: The element which the user will be using to slide the target element side to side</li>
+<li><code>disable</code>: String, set to &#39;left&#39; or &#39;right&#39; to disable the respective side</li>
+<li><code>addBodyClasses</code>: Add classes to the body to signify which side is being opened</li>
+<li><code>hyperextensible</code>: If false, pane may not be slide past the minPosition and maxPosition</li>
+<li><code>resistance</code>: The cooeficcient used to slow sliding when user has passed max or min threshold</li>
+<li><code>flickThreshold</code>: Number of pixels the user needs to swiftly travel to activate a &quot;flick&quot; open</li>
+<li><code>transitionSpeed</code>: The speed at which the pane slides open or closed</li>
+<li><code>easing</code>: The CSS3 Easing method you want to use for transitions</li>
+<li><code>maxPosition</code>: Maximum number of pixels the pane may be slid to the right</li>
+<li><code>minPosition</code>: Maximum number of pixels the pane may be slid to the left</li>
+<li><code>tapToClose</code>: If true, tapping an open pane will close it</li>
+<li><code>touchToDrag</code>: If true, dragging the target <code>settings.element</code> will open/close the pane</li>
+<li><code>minDragDistance</code>: The minimum amount of pixels the user needs to drag within the <code>slideIntent</code> degrees to move the pane </li>
+<li><code>slideIntent</code>: The number of degrees the user must initiate sliding in towards the left or right (see diagram below)</li>
+</ul>
+<p>Notes on Slide Intent: The slide intent is an int between 0 and 90, and represents the degrees in the first quadrant of a circle that you would like to have mirrored on the X <em>and</em> Y axis. For example, if you have 40 set as your <code>slideIntent</code> value, the user would only be able to slide the pane by dragging in the blue area in the diagram below. Once intent has been defined, it will not change until the user releases.</p>
+<p><img src="http://i.imgur.com/uG2CNR8.png"></p>
+<h2>Public Methods</h2>
+<h3><code>open</code>: Opens the pane to the specified side</h3>
+<pre><code class="language-javascript">snapper.open(&#39;left&#39;);
+// OR
+snapper.open(&#39;right&#39;);</code></pre>
+<h3><code>close</code>: Closes the pane</h3>
+<pre><code class="language-javascript">snapper.close();</code></pre>
+<h3><code>expand</code>: Opens the pane entirely</h3>
+<pre><code class="language-javascript">snapper.expand(&#39;left&#39;);
+// OR
+snapper.expand(&#39;right&#39;);</code></pre>
+<h3><code>disable</code>: Disables sliding events</h3>
+<pre><code class="language-javascript">snapper.disable();</code></pre>
+<h3><code>enable</code>: Enables sliding events after disabling</h3>
+<pre><code class="language-javascript">snapper.enable();</code></pre>
+<h3><code>on</code>: Adds an event hook</h3>
+<pre><code class="language-javascript">snapper.on(&#39;start&#39;, function(){
+  // Do Something
+});</code></pre>
+<p>The available methods to hook into are as follows:</p>
+<ul>
+<li><code>start</code>: Fired when touching down on the draggable pane and it begins to move</li>
+<li><code>drag</code>: Fired when the pane has been moved or slid</li>
+<li><code>end</code>: Fired when the pane has been let go of</li>
+<li><code>animating</code>: Fired when the pane is animating</li>
+<li><code>animated</code>: Fired when the pane is finished it&#39;s animations</li>
+<li><code>ignore</code>: Fired when trying to drag the pane but ended up dragging on an ignored element</li>
+<li><code>close</code>: Fired when close is called directly or if tapToClose is set to true</li>
+<li><code>open</code>: Fired when the menu is opened</li>
+<li><code>expandLeft</code>: Fired on expand(&#39;left&#39;)</li>
+<li><code>expandRight</code>: Fired on expand(&#39;right&#39;)</li>
+<li><code>enable</code>: Fired on enable</li>
+<li><code>disable</code>: Fired on disable</li>
+</ul>
+<h3><code>off</code>: Removes an event hook</h3>
+<pre><code class="language-javascript">snapper.off(&#39;drag&#39;);</code></pre>
+<p>The event names listed above apply for the <code>off</code> method.</p>
+<h3><code>settings</code>: Updates the settings for an already instantiated object</h3>
+<pre><code class="language-javascript">snapper.settings({yourSettings});</code></pre>
+<p>Currently, <code>settings.element</code>, <code>settings.touchToDrag</code> cannot be updated. To update the element, instantiate a new object. To allow listening to a drag, use <code>snapper.enable()</code></p>
+<h3><code>state</code>: Returns detailed information about the state of the pane</h3>
+<pre><code class="language-javascript">var data = snapper.state();</code></pre>
+<p>The data returned from the <code>state</code> method will look like the following:</p>
+<pre><code class="language-javascript">{
+    state: &quot;closed&quot;, // State of the Pane
+    info:{
+        opening: &quot;left&quot;, // Side which user intends to open
+        towards: &quot;right&quot;, // Direction user is dragging towards
+        hyperExtending: false, // True if user is pulling past predefined bounds
+        halfway: false, // True if pane is at least halfway open
+        flick: false, // True if user has moved pane X amount of pixels in the open/close direction without changing directions
+        translation:{
+            absolute: 20, // Pixels pane has translated
+            relative: 21, // Pixels pane has translated relative to starting translation
+            sinceDirectionChange: 10, // Pixels pane has translated since the direction of the pane has changed
+            percentage: 40.571649 // The percentage that the Pane is open. Good or animating other things
+        }
+    }
+}</code></pre>
+<h2>Gotchas</h2>
+<h3>Layout</h3>
+<p>The layout itself is what most people will have a hard time emulating, so the simplest approach I have found is as follows:</p>
+<p>Two absolute elements, one to represent <em>all</em> the content, and another to represent <em>all</em> the drawers. The content has a higher z-index than the drawers. Within the drawers element, it&#39;s direct children should represent the containers for the drawers, these should be <code>fixed</code> or <code>absolute</code>. Assigning classes to your drawers to specify which side it is on is recommended. All absolutely positioned elements should have 0 for <code>top, left, right, bottom</code> properties, excluding your panes which will have <code>auto</code> set to their respective sides and a width assigned. The width of your drawers is usually the same number you want to use for <code>minPosition</code> and <code>maxPosition</code></p>
+<pre><code class="language-html">div.drawers {position: absolute;}
+    div.left-drawer  {position: absolute;}
+        [content]
+    div.right-drawer  {position: absolute;}
+        [content]
+div#content {position: absolute;}
+    [top-bars]
+    [content] {overflow: auto}
+    [bottom-bars]</code></pre>
+<p>A sample layout is found in demo/apps/default.html.</p>
+<h3>Independent Scrolling</h3>
+<p>Some CSS is required to get some smooth ass scrolling. Utilize the CSS below to apply this to any of your elements:</p>
+<pre><code class="language-css">.scrollable{
+    overflow: auto;
+    -webkit-transition-property: top, bottom;
+    transition-property: top, bottom;
+    -webkit-transition-duration: .2s, .2s;
+    transition-duration: .2s, .2s;
+    -webkit-transition-timing-function: linear, linear;
+    transition-timing-function: linear, linear;
+    -webkit-overflow-scrolling: touch;
+}</code></pre>
+<h3>Z-Indeces and Display</h3>
+<p>Because of the nature of this code, drawers are just kind of stacked behind the content. To bring the proper drawer to the front, you can hook into Snaps.js&#39; CSS classes:</p>
+<p>With <code>addBodyClasses</code> set to <code>true</code> in your initialize options, one of the two classess will be added to the body tag: <code>.snapjs-left</code> or <code>.snapjs-right</code>, depending on which pane is being open, respectively. This being said, you can apply your CSS like the following to show the proper drawers:</p>
+<pre><code class="language-css">.snapjs-right .left-drawer,
+.snapjs-left .right-drawer {
+    display: none;
+}</code></pre>
+<h2>FAQ</h2>
+<h3>- How do I make a toggle button?</h3>
+<p>Toggles have been a popular request, but rather than bog the library down with additional methods, you can utilize the powerful API of Snap.js to create your own toggle. Toggles can be done like the following:</p>
+<pre><code class="language-javascript">myToggleButton.addEventListener(&#39;click&#39;, function(){
+
+    if( snapper.state().state==&quot;left&quot; ){
+        snapper.close();
+    } else {
+        snapper.open(&#39;left&#39;);
+    }
+
+});</code></pre>
+<h3>- How do I disable Snap.js dragging for my touch slider?</h3>
+<p>Snap.js supports cascading cancellation of events via a data attribute <code>data-snap-ignore</code>. If you were to use a slider, your markup might look like the following:</p>
+<pre><code class="language-html">&lt;div class=&quot;slider&quot; data-snap-ignore=&quot;true&quot;&gt;
+    &lt;ul&gt;
+        &lt;li&gt;&lt;img src=&quot;slide.jpg&quot;&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;img src=&quot;slide.jpg&quot;&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;img src=&quot;slide.jpg&quot;&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;img src=&quot;slide.jpg&quot;&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;img src=&quot;slide.jpg&quot;&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+&lt;/div&gt;</code></pre>
+<p>All interactions on children elements of the element with the <code>data-snap-ignore</code> attribute will have their Snap.js events ignored.</p>
+<h3>- I am using Push.js from Ratchet, I keep losing my events on my elements, how can I fix this?</h3>
+<p>Simple. As wack as Push.js is (yes, it is in desperate need of attention as of v1.0.0), we can still solve this problem with it&#39;s only callback, <code>&#39;push&#39;</code>.</p>
+<pre><code class="language-javascript">// The function that will initialize your Snap.js instance
+var doSnap = function(){
+    if(window.snapper){
+         // Snap.js already exists, we just need to re-bind events
+        window.snapper.enable();
+    } else {
+        // Initialize Snap.js
+        window.snapper = new Snap({
+            element: document.getElementById(&#39;content&#39;)
+        });
+    } 
+};
+
+window.addEventListener(&#39;push&#39;, doSnap);
+doSnap();</code></pre>
+<h3>- Snap.js works on my Android device but i cannot scroll the content in my drawers, what gives?</h3>
+<p>Older Android devices (and iPhone as well) do not have native support for overflow scrolling. To solve this, you may use the wonderful library called <a href="https://github.com/cubiq/iscroll">iScroll</a></p>
+<h3>- <code>transform: translate3d()</code> breaks my fixed child elements, how can I solve this?</h3>
+<p><a href="https://code.google.com/p/chromium/issues/detail?id=20574">This is a problem with Chromium</a> and should be fixed soon. I would advise not having your direct children element set to fixed, that may possibly solve your problem.</p>
+<h3>- I am experiencing a weird flicker when the CSS transform is applied</h3>
+<p>To solve the flicker, apply the following CSS to the element in question</p>
+<pre><code class="language-css">#content{
+    backface-visibility:hidden;
+    -webkit-backface-visibility:hidden; /* Chrome and Safari */
+    -moz-backface-visibility:hidden; /* Firefox */
+    -ms-backface-visibility:hidden; /* Internet Explorer 10+ */
+}</code></pre>
+<h2>Compliments</h2>
+<p>This code attempts to make your webapp&#39;s feel more &quot;native&quot;. These other repos go well with it, too!</p>
+<ul>
+<li><a href="https://github.com/jakiestfu/Snap.js">Snap.js</a></li>
+<li><a href="https://github.com/jakiestfu/AppScroll">AppScroll.js</a></li>
+<li><a href="https://github.com/ftlabs/fastclick">fastclick</a></li>
+</ul>
+<h2>Licensing</h2>
+<p>MIT, dawg</p>
+</div></body></html>
