@@ -37,7 +37,7 @@ function mainCtrl($scope, $http) {
 
 function homeCtrl($scope, $http) {
 	$http.get(api + '/api/stories').success(function(data) {
-		$scope.stories = data.reverse();
+		$scope.stories = data;
 	});
 }
 
