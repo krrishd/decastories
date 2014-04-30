@@ -72,20 +72,20 @@ function storyCtrl($scope, $http, $stateParams) {
 
 function newCtrl($scope, $http) {	
 	$scope.newStory = function() {
-		$scope.payload = {
+		var payload = {
 			name : $scope.name,
 			state : $scope.state,
 			chapter : $scope.chapter,
 			title : $scope.title,
 			content : $scope.content
 		};
-		$http.post(api + '/api/stories/new', $scope.payload)
+		$http.post(api + '/api/stories/new', payload)
 			.success(function(data) {
 				alert('Posted!');
-				window.location.hash = '#/';
+				window.location.hash = '#/story/' + data[0]._id;
 			})
 			.error(function(err) {
-				alert('Oops! Something went wrong');
+				alert('Oops! Something went wrong, either you forgot to fil something out, or you left something incomplete. Please try again :)');
 			});
 	};
 
