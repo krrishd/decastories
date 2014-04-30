@@ -55,7 +55,7 @@ function stateCtrl($scope, $http, $stateParams) {
 		return theState;
 	};
 	$http.get(api + '/api/stories/' + $stateParams.state).success(function(data) {
-		$scope.stories = data.reverse();
+		$scope.stories = data;
 		if (data.length < 1) {
 			alert('No stories yet!');
 			window.location.hash = "#/";
